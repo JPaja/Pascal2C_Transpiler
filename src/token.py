@@ -4,7 +4,9 @@ from enum import Enum, auto
 class Class(Enum):
     ID = auto()
     EOF = auto()
+    Exit = auto()
 
+    Array = auto()
     TYPE = auto()
     INT = auto()
     CHAR = auto()
@@ -38,7 +40,8 @@ class Class(Enum):
     SEMICOLON = auto()
     COMMA = auto()
     DOT = auto()
-    DOUBLEDOT = auto()
+    Colon = auto()
+    DOTDOT = auto()
 
     BEGIN = auto()
     END  = auto()

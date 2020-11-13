@@ -70,8 +70,12 @@ class Lexer:
 			return Token(Class.PROCEDURE,lexeme)
 		elif lexeme == 'function':
 			return Token(Class.FUNCTION,lexeme)
-		elif lexeme == 'integer' or lexeme == 'char':
+		elif lexeme == 'integer' or lexeme == 'char' or lexeme == 'string':
 			return Token(Class.TYPE, lexeme)
+		elif lexeme == 'array':
+			return Token(Class.Array, lexeme)
+		elif lexeme == 'exit':
+			return Token(Class.Exit, lexeme)
 		return Token(Class.ID, lexeme)
 
 	def next_char(self):
@@ -98,7 +102,7 @@ class Lexer:
 			if curr == '=':
 					return Token(Class.ASSIGN, ':=')
 			self.pos -= 1
-			return Token(Class.DOUBLEDOT, curr)
+			return Token(Class.Colon, ':')
 		elif curr == '+':
 			return Token(Class.PLUS, curr)
 		elif curr == '-':
@@ -136,7 +140,11 @@ class Lexer:
 		elif curr == ',':
 			return Token(Class.COMMA, curr)
 		elif curr == '.':
-			return Token(Class.DOT, curr)
+			curr = self.next_char();
+			if curr == '.':
+				return Token(Class.DOTDOT, '..')
+			self.pos -= 1
+			return Token(Class.DOT, '.')
 		self.die(curr)
 
 	def lex(self):

@@ -1,5 +1,6 @@
 import unittest   
 import glob
+from src.parser import Parser
 from src.lexer import Lexer
 
 class Tests(unittest.TestCase):
@@ -17,6 +18,8 @@ class Tests(unittest.TestCase):
 				print(f"testing {path}")
 				text = source.read()
 				lexer = Lexer(text)
-				lexer.lex()
+				tokens = lexer.lex()
+				parser = Parser(tokens)
+				parser.parse()
 		self.assertTrue(True)
 
