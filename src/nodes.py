@@ -87,21 +87,9 @@ class Block(Node):
     def __init__(self, nodes):
         self.nodes = nodes
 
-
-class Params(Node):
-    def __init__(self, params):
-        self.params = params
-
-
 class Args(Node):
     def __init__(self, args):
         self.args = args
-
-
-class Elems(Node):
-    def __init__(self, elems):
-        self.elems = elems
-
 
 class Exit(Node):
     def __init__(self):
@@ -115,12 +103,10 @@ class Continue(Node):
     def __init__(self):
         return
 
-class Repeat(Node):
-    def __init__(self):
-        return
 
 class Until(Node):
-    def __init__(self,cond):
+    def __init__(self,block,cond):
+        self.block = block
         self.cond = cond
 
 class Type(Node):
