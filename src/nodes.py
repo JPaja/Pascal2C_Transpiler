@@ -88,19 +88,11 @@ class Block(Node):
         self.nodes = nodes
 
 
-class Params(Node):
-    def __init__(self, params):
-        self.params = params
-
 
 class Args(Node):
     def __init__(self, args):
         self.args = args
 
-
-class Elems(Node):
-    def __init__(self, elems):
-        self.elems = elems
 
 
 class Exit(Node):
