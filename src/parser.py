@@ -161,12 +161,13 @@ class Parser:
                 self.eat(Class.CONTINUE)
                 self.eat(Class.SEMICOLON)
             elif(self.curr.class_ == Class.REPEAT):
+                nodes.append(Repeat())
                 self.eat(Class.REPEAT)
-                block = self.block()
+            elif(self.curr.class_ == Class.UNIIL):
                 self.eat(Class.UNIIL)
                 cond = self.logic()
+                nodes.append(Until(cond))
                 self.eat(Class.SEMICOLON)
-                nodes.append(Until(block,cond))
             elif self.curr.class_ == Class.FOR:
                 nodes.append(self.for_())
                 self.eat(Class.SEMICOLON)
