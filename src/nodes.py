@@ -105,12 +105,10 @@ class Continue(Node):
     def __init__(self):
         return
 
-class Repeat(Node):
-    def __init__(self):
-        return
 
 class Until(Node):
-    def __init__(self,cond):
+    def __init__(self,block,cond):
+        self.block = block
         self.cond = cond
 
 class Type(Node):

@@ -13,12 +13,14 @@ begin
     end;
   I:=0;
   repeat
+  begin
     Inc(I);
     if I>5 then
     begin
       break;
     end;
     Writeln (i);
+  end;
   until I>=10;
   for I:=1 to 10 do
     begin
