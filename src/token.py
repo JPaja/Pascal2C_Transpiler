@@ -31,6 +31,7 @@ class Class(Enum):
     OR = auto()
     AND = auto()
     NOT = auto()
+    XOR = auto()
 
     LPAREN = auto()
     RPAREN = auto()
@@ -54,6 +55,12 @@ class Class(Enum):
     TO = auto()
     WHILE = auto()
     DO = auto()
+
+    BREAK = auto()
+    CONTINUE = auto()
+
+    REPEAT = auto()
+    UNIIL = auto()
 
     VAR = auto()
     OF = auto()

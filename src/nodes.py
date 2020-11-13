@@ -107,6 +107,22 @@ class Exit(Node):
     def __init__(self):
         return
 
+class Break(Node):
+    def __init__(self):
+        return
+
+class Continue(Node):
+    def __init__(self):
+        return
+
+class Repeat(Node):
+    def __init__(self):
+        return
+
+class Until(Node):
+    def __init__(self,cond):
+        self.cond = cond
+
 class Type(Node):
     def __init__(self, value):
         self.value = value

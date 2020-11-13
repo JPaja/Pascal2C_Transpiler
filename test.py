@@ -5,7 +5,7 @@ from src.lexer import Lexer
 
 class Tests(unittest.TestCase):
 	def test_lexer(self):
-		for path in glob.glob("test/pas/*.pas"):
+		for path in glob.glob("test/pas/*11.pas"):
 			with open(path, 'r') as source:
 				text = source.read()
 				lexer = Lexer(text)

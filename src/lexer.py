@@ -42,6 +42,8 @@ class Lexer:
 			return Token(Class.NOT,lexeme)
 		elif lexeme == 'or':
 			return Token(Class.OR,lexeme)
+		elif lexeme == 'xor':
+			return Token(Class.OR,lexeme)
 		elif lexeme == 'and':
 			return Token(Class.AND,lexeme)
 		elif lexeme == 'begin':
@@ -62,6 +64,14 @@ class Lexer:
 			return Token(Class.DO,lexeme)
 		elif lexeme == 'while':
 			return Token(Class.WHILE,lexeme)
+		elif lexeme == 'break':
+			return Token(Class.BREAK,lexeme)
+		elif lexeme == 'continue':
+			return Token(Class.CONTINUE,lexeme)
+		elif lexeme == 'repeat':
+			return Token(Class.REPEAT,lexeme)
+		elif lexeme == 'until':
+			return Token(Class.UNIIL,lexeme)
 		elif lexeme == 'var':
 			return Token(Class.VAR,lexeme)
 		elif lexeme == 'of':
@@ -70,7 +80,7 @@ class Lexer:
 			return Token(Class.PROCEDURE,lexeme)
 		elif lexeme == 'function':
 			return Token(Class.FUNCTION,lexeme)
-		elif lexeme == 'integer' or lexeme == 'char' or lexeme == 'string':
+		elif lexeme == 'integer' or lexeme == 'char' or lexeme == 'string' or lexeme == 'real':
 			return Token(Class.TYPE, lexeme)
 		elif lexeme == 'array':
 			return Token(Class.Array, lexeme)
