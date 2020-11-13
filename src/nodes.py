@@ -11,7 +11,7 @@ class Program(Node):
 class Body(Node):
     def __init__(self, variables,block):
         self.variables = variables
-        self.body = block
+        self.block = block
 
 class Decl(Node):
     def __init__(self, type_, ids_, value):
@@ -36,6 +36,9 @@ class ArrayElem(Node):
         self.id_ = id_
         self.index = index
 
+class Elems(Node):
+    def __init__(self, values):
+        self.values = values
 
 class Assign(Node):
     def __init__(self, id_, expr):
@@ -92,8 +95,6 @@ class Block(Node):
 class Args(Node):
     def __init__(self, args):
         self.args = args
-
-
 
 class Exit(Node):
     def __init__(self):

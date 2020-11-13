@@ -31,7 +31,7 @@ class Parser:
         while self.curr.class_ in [Class.PROCEDURE, Class.FUNCTION]:
             if self.curr.class_ == Class.PROCEDURE:
                 self.eat(Class.PROCEDURE)
-                id_ = self.curr.lexeme
+                id_ = Id(self.curr.lexeme)
                 self.eat(Class.ID)
                 args = self.args_()
                 self.eat(Class.SEMICOLON)
@@ -40,7 +40,7 @@ class Parser:
                 nodes.append(ProcImpl(id_,args,body))
             elif self.curr.class_ == Class.FUNCTION:
                 self.eat(Class.FUNCTION)
-                id_ = self.curr.lexeme
+                id_ = Id(self.curr.lexeme)
                 self.eat(Class.ID)
                 args = self.args_()
                 self.eat(Class.Colon)
@@ -83,7 +83,7 @@ class Parser:
             if self.curr.class_ == Class.COMMA:
                 self.eat(Class.COMMA)
         self.eat(Class.RPAREN)
-        return nodes
+        return Elems(nodes)
 
     def body(self):
         vars_ = []

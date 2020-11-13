@@ -2,6 +2,7 @@ import unittest
 import glob
 from src.parser import Parser
 from src.lexer import Lexer
+from src.grapher import Grapher
 
 class Tests(unittest.TestCase):
 	def test_lexer(self):
@@ -22,4 +23,22 @@ class Tests(unittest.TestCase):
 				parser = Parser(tokens)
 				parser.parse()
 		self.assertTrue(True)
+	
+	def test_grapher(self):
+		_view = False
+		for path in glob.glob("test/pas/*.pas"):
+			with open(path, 'r') as source:
+				print(f"testing {path}")
+				text = source.read()
+				lexer = Lexer(text)
+				tokens = lexer.lex()
+				parser = Parser(tokens)
+				ast = parser.parse()
+				grapher = Grapher(ast)
+				dot = grapher.graph()
+				print(dot)
+				if(_view):
+					grapher.show()
+		self.assertTrue(True)
 
+#Tests().test_grapher()
