@@ -11,4 +11,5 @@
     "python.testing.nosetestsEnabled": false,
     "python.testing.unittestEnabled": true,
     "python.pythonPath": "/bin/python",
+    "jupyter.jupyterServerType": "local",
 }
