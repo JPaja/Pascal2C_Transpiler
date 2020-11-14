@@ -25,8 +25,7 @@ class Tests(unittest.TestCase):
 		self.assertTrue(True)
 	
 	def test_grapher(self):
-		_view = False
-		for path in glob.glob("test/pas/*.pas"):
+		for path in glob.glob("test/pas/*3.pas"):
 			with open(path, 'r') as source:
 				print(f"testing {path}")
 				text = source.read()
@@ -36,9 +35,7 @@ class Tests(unittest.TestCase):
 				ast = parser.parse()
 				grapher = Grapher(ast)
 				dot = grapher.graph()
-				print(dot)
-				if(_view):
-					grapher.show()
+				grapher.save()
 		self.assertTrue(True)
 
-#Tests().test_grapher()
+Tests().test_grapher()

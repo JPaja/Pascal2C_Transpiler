@@ -10,7 +10,6 @@ class Grapher(Visitor):
         self.dot.node_attr['shape'] = 'box'
         self.dot.node_attr['height'] = '0.1'
         self.dot.edge_attr['arrowsize'] = '0.5'
-
     def add_node(self, parent, node, name=None):
         node._index = self._count
         self._count += 1
@@ -176,6 +175,8 @@ class Grapher(Visitor):
         self.visit(None, self.ast)
         return self.dot.source
 
-    def show(self):
-        s = Source(self.dot.source, filename='graph.png', format='png')
-        s.view()
+    def save(self):
+        s = Source(self.dot.source, filename='tmp/graph', format='png')
+        s.save()
+        s.render()
+        return s
