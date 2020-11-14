@@ -36,6 +36,6 @@ class Tests(unittest.TestCase):
 				grapher = Grapher(ast)
 				dot = grapher.graph()
 				grapher.save()
-		self.assertTrue(True)
+		self.assertTrue(True)               
 
-Tests().test_grapher()
+#Tests().test_grapher()
