@@ -7,7 +7,6 @@ from src.grapher import Grapher
 
 class Tests(unittest.TestCase):
 
-
 	def test_lexer(self):
 		for path in glob.glob("test/grader/*/src.pas"):
 			with open(path, 'r') as source:
@@ -21,7 +20,7 @@ class Tests(unittest.TestCase):
 		self.assertTrue(True)
 	
 	def test_parser(self):
-		for path in glob.glob("test/grader/*/src.pas"):
+		for path in glob.glob("test/grader/01/src.pas"):
 			with open(path, 'r') as source:
 				try:
 					text = source.read()

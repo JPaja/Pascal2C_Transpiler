@@ -190,11 +190,16 @@ class Parser:
     def for_(self):
         self.eat(Class.FOR)
         init = self.id_()
-        self.eat(Class.TO)
+        downto = False
+        if self.curr.class_ == Class.TO:
+            self.eat(Class.TO)
+        else:
+            downto = True
+            self.eat(Class.DOWNTO)
         to = self.expr()
         self.eat(Class.DO)
         block = self.block()
-        return For(init, to, block)
+        return For(init, to, block,downto)
 
     def while_(self):
         self.eat(Class.WHILE)

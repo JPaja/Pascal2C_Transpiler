@@ -54,6 +54,7 @@ class Class(Enum):
 
     FOR = auto()
     TO = auto()
+    DOWNTO = auto()
     WHILE = auto()
     DO = auto()
 

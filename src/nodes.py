@@ -64,10 +64,11 @@ class While(Node):
 
 
 class For(Node):
-    def __init__(self, init, to, block):
+    def __init__(self, init, to, block, downto):
         self.init = init
         self.to = to
         self.block = block
+        self.downto = downto
 
 
 class FuncImpl(Node):
