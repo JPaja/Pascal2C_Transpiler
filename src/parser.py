@@ -281,7 +281,7 @@ class Parser:
             return Int(no)
         elif self.curr.class_ == Class.Float:
             no =  self.curr.lexeme;
-            self.eat(Class.INT)
+            self.eat(Class.Float)
             return Float(no)
         elif self.curr.class_ == Class.CHAR:
             value = Char(self.curr.lexeme)
