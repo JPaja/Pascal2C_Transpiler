@@ -97,8 +97,8 @@ class Args(Node):
         self.args = args
 
 class Exit(Node):
-    def __init__(self):
-        return
+    def __init__(self,arg):
+        self.arg = arg;
 
 class Break(Node):
     def __init__(self):

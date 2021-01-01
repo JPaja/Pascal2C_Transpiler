@@ -149,9 +149,14 @@ class Parser:
                 nodes.append(self.id_())
                 self.eat(Class.SEMICOLON)
             elif(self.curr.class_ == Class.Exit):
-                nodes.append(Exit())
                 self.eat(Class.Exit)
+                arg = None
+                if(self.curr.class_ == Class.LPAREN):
+                    self.eat(Class.LPAREN)
+                    arg = self.expr()
+                    self.eat(Class.RPAREN)
                 self.eat(Class.SEMICOLON)
+                nodes.append(Exit(arg))
             elif(self.curr.class_ == Class.BREAK):
                 nodes.append(Break())
                 self.eat(Class.BREAK)
@@ -244,23 +249,23 @@ class Parser:
 
     def logic(self):
         first = self.compare()
-        if self.curr.class_ == Class.AND:
-            op = self.curr.lexeme
-            self.eat(Class.AND)
-            second = self.compare()
-            return BinOp(op, first, second)
-        elif self.curr.class_ == Class.OR:
-            op = self.curr.lexeme
-            self.eat(Class.OR)
-            second = self.compare()
-            return BinOp(op, first, second)
-        elif self.curr.class_ == Class.XOR:
-            op = self.curr.lexeme
-            self.eat(Class.XOR)
-            second = self.compare()
-            return BinOp(op, first, second)
-        else:
-            return first
+        while self.curr.class_ in [Class.AND, Class.OR, Class.XOR]:
+            if self.curr.class_ == Class.AND:
+                op = self.curr.lexeme
+                self.eat(Class.AND)
+                second = self.logic()
+                first =  BinOp(op, first, second)
+            elif self.curr.class_ == Class.OR:
+                op = self.curr.lexeme
+                self.eat(Class.OR)
+                second = self.logic()
+                first =  BinOp(op, first, second)
+            elif self.curr.class_ == Class.XOR:
+                op = self.curr.lexeme
+                self.eat(Class.XOR)
+                second = self.logic()
+                first = BinOp(op, first, second)
+        return first
 
     def factor(self):
         if self.curr.class_ == Class.INT:
@@ -343,38 +348,38 @@ class Parser:
 
     def compare(self):
         first = self.expr2()
-        if self.curr.class_ == Class.EQ:
-            op = self.curr.lexeme
-            self.eat(Class.EQ)
-            second = self.expr2()
-            return BinOp(op, first, second)
-        elif self.curr.class_ == Class.NEQ:
-            op = self.curr.lexeme
-            self.eat(Class.NEQ)
-            second = self.expr2()
-            return BinOp(op, first, second)
-        elif self.curr.class_ == Class.LT:
-            op = self.curr.lexeme
-            self.eat(Class.LT)
-            second = self.expr2()
-            return BinOp(op, first, second)
-        elif self.curr.class_ == Class.GT:
-            op = self.curr.lexeme
-            self.eat(Class.GT)
-            second = self.expr2()
-            return BinOp(op, first, second)
-        elif self.curr.class_ == Class.LTE:
-            op = self.curr.lexeme
-            self.eat(Class.LTE)
-            second = self.expr2()
-            return BinOp(op, first, second)
-        elif self.curr.class_ == Class.GTE:
-            op = self.curr.lexeme
-            self.eat(Class.GTE)
-            second = self.expr2()
-            return BinOp(op, first, second)
-        else:
-            return first
+        while self.curr.class_ in [Class.EQ, Class.NEQ, Class.LT, Class.GT, Class.LTE, Class.GTE]:
+            if self.curr.class_ == Class.EQ:
+                op = self.curr.lexeme
+                self.eat(Class.EQ)
+                second = self.expr2()
+                first = BinOp(op, first, second)
+            elif self.curr.class_ == Class.NEQ:
+                op = self.curr.lexeme
+                self.eat(Class.NEQ)
+                second = self.expr2()
+                first = BinOp(op, first, second)
+            elif self.curr.class_ == Class.LT:
+                op = self.curr.lexeme
+                self.eat(Class.LT)
+                second = self.expr2()
+                first = BinOp(op, first, second)
+            elif self.curr.class_ == Class.GT:
+                op = self.curr.lexeme
+                self.eat(Class.GT)
+                second = self.expr2()
+                first = BinOp(op, first, second)
+            elif self.curr.class_ == Class.LTE:
+                op = self.curr.lexeme
+                self.eat(Class.LTE)
+                second = self.expr2()
+                first = BinOp(op, first, second)
+            elif self.curr.class_ == Class.GTE:
+                op = self.curr.lexeme
+                self.eat(Class.GTE)
+                second = self.expr2()
+                first = BinOp(op, first, second)
+        return first
 
     def parse(self):
         return self.program()
