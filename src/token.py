@@ -9,6 +9,7 @@ class Class(Enum):
     Array = auto()
     TYPE = auto()
     INT = auto()
+    Float = auto()
     CHAR = auto()
     STRING = auto()
 

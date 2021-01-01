@@ -47,10 +47,14 @@ class Assign(Node):
 
 
 class If(Node):
-    def __init__(self, cond, true, false):
+    def __init__(self, statements, else_block):
+        self.statements = statements
+        self.else_block = else_block
+
+class IfStatement(Node):
+    def __init__(self, cond, block):
         self.cond = cond
-        self.true = true
-        self.false = false
+        self.block = block
 
 
 class While(Node):
@@ -125,6 +129,9 @@ class Int(Node):
     def __init__(self, value):
         self.value = value
 
+class Float(Node):
+    def __init__(self, value):
+        self.value = value
 
 class Char(Node):
     def __init__(self, value):

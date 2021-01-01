@@ -102,10 +102,22 @@ class Lexer:
 		curr = self.next_char()
 		if curr is None:
 			return Token(Class.EOF, curr)
-		if self.is_keyword(curr):
-			return self.read_keyword()
 		elif curr.isdigit():
-			return Token(Class.INT, self.read_int())
+			value = self.read_int()
+			curr = self.next_char()
+			if curr != '.':
+				self.pos -= 1
+				return Token(Class.INT, value)
+			curr = self.next_char()
+			if not curr.isdigit():
+				self.pos -= 2
+				return Token(Class.INT, value)
+			mantisa = self.read_int()
+			value = str(value) + '.' + str(mantisa)
+			value = float(value)
+			return Token(Class.Float, value)
+		elif self.is_keyword(curr):
+			return self.read_keyword()
 		elif curr == '\'':
 			return Token(Class.CHAR, self.read_char())
 		elif curr == '"':

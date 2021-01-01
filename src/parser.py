@@ -204,15 +204,22 @@ class Parser:
         return While(cond, block)
     
     def if_(self):
+        statements = []
+        else_block = None
         self.eat(Class.IF)
-        cond = self.logic()
-        self.eat(Class.THEN)
-        true_ = self.block()
-        false_ = None
-        if self.curr.class_ == Class.ELSE:
+        while True:
+            cond = self.logic()
+            self.eat(Class.THEN)
+            block = self.block()
+            statements.append(IfStatement(cond,block))
+            if self.curr.class_ != Class.ELSE:
+                break
             self.eat(Class.ELSE)
-            false_ = self.block()
-        return If(cond, true_, false_)
+            if self.curr.class_ != Class.IF:
+                else_block = self.block()
+                break
+            self.eat(Class.IF)
+        return If(statements, else_block)
 
     def id_(self):
         id_ = Id(self.curr.lexeme)
@@ -269,9 +276,13 @@ class Parser:
 
     def factor(self):
         if self.curr.class_ == Class.INT:
-            value = Int(self.curr.lexeme)
+            no =  self.curr.lexeme;
             self.eat(Class.INT)
-            return value
+            return Int(no)
+        elif self.curr.class_ == Class.Float:
+            no =  self.curr.lexeme;
+            self.eat(Class.INT)
+            return Float(no)
         elif self.curr.class_ == Class.CHAR:
             value = Char(self.curr.lexeme)
             self.eat(Class.CHAR)
