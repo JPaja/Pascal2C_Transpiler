@@ -30,9 +30,12 @@ class Lexer:
 		self.pos += 1
 		return lexeme
 
+	def is_keyword(self,c):
+		return c.isalnum() or c == '_'
+
 	def read_keyword(self):
 		lexeme = self.text[self.pos]
-		while self.pos + 1 < self.len and self.text[self.pos + 1].isalnum():
+		while self.pos + 1 < self.len and self.is_keyword(self.text[self.pos + 1]):
 			lexeme += self.next_char()
 		if lexeme == 'div':
 			return Token(Class.DIV,lexeme)
@@ -99,7 +102,7 @@ class Lexer:
 		curr = self.next_char()
 		if curr is None:
 			return Token(Class.EOF, curr)
-		if curr.isalpha():
+		if self.is_keyword(curr):
 			return self.read_keyword()
 		elif curr.isdigit():
 			return Token(Class.INT, self.read_int())
