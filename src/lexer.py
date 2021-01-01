@@ -83,7 +83,7 @@ class Lexer:
 			return Token(Class.PROCEDURE,lexeme)
 		elif lexeme == 'function':
 			return Token(Class.FUNCTION,lexeme)
-		elif lexeme == 'integer' or lexeme == 'char' or lexeme == 'string' or lexeme == 'real':
+		elif lexeme == 'integer' or lexeme == 'char' or lexeme == 'string' or lexeme == 'real' or lexeme == 'boolean':
 			return Token(Class.TYPE, lexeme)
 		elif lexeme == 'array':
 			return Token(Class.Array, lexeme)

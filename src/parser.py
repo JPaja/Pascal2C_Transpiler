@@ -324,6 +324,9 @@ class Parser:
         return first
 
     def expr(self):
+        return self.logic()
+
+    def expr2(self):
         first = self.term()
         while self.curr.class_ in [Class.PLUS, Class.MINUS]:
             if self.curr.class_ == Class.PLUS:
@@ -339,36 +342,36 @@ class Parser:
         return first
 
     def compare(self):
-        first = self.expr()
+        first = self.expr2()
         if self.curr.class_ == Class.EQ:
             op = self.curr.lexeme
             self.eat(Class.EQ)
-            second = self.expr()
+            second = self.expr2()
             return BinOp(op, first, second)
         elif self.curr.class_ == Class.NEQ:
             op = self.curr.lexeme
             self.eat(Class.NEQ)
-            second = self.expr()
+            second = self.expr2()
             return BinOp(op, first, second)
         elif self.curr.class_ == Class.LT:
             op = self.curr.lexeme
             self.eat(Class.LT)
-            second = self.expr()
+            second = self.expr2()
             return BinOp(op, first, second)
         elif self.curr.class_ == Class.GT:
             op = self.curr.lexeme
             self.eat(Class.GT)
-            second = self.expr()
+            second = self.expr2()
             return BinOp(op, first, second)
         elif self.curr.class_ == Class.LTE:
             op = self.curr.lexeme
             self.eat(Class.LTE)
-            second = self.expr()
+            second = self.expr2()
             return BinOp(op, first, second)
         elif self.curr.class_ == Class.GTE:
             op = self.curr.lexeme
             self.eat(Class.GTE)
-            second = self.expr()
+            second = self.expr2()
             return BinOp(op, first, second)
         else:
             return first

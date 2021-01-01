@@ -1,5 +1,6 @@
 import unittest   
 import glob
+import sys
 from src.parser import Parser
 from src.lexer import Lexer
 from src.grapher import Grapher
@@ -14,8 +15,9 @@ class Tests(unittest.TestCase):
 					text = source.read()
 					lexer = Lexer(text)
 					lexer.lex()
-				except Exception as ex:
-					self.fail("Failed to lex "+ path + "\n"+ ex)
+				except:
+					ex = sys.exc_info()[0]
+					self.fail("Failed to lex " + path + "\n"+ ex)
 		self.assertTrue(True)
 	
 	def test_parser(self):
@@ -27,8 +29,9 @@ class Tests(unittest.TestCase):
 					tokens = lexer.lex()
 					parser = Parser(tokens)
 					parser.parse()
-				except Exception as ex:
-					self.fail("Failed to parse "+ path + "\n"+ ex)
+				except:
+					ex = sys.exc_info()[0]
+					self.fail("Failed to parse " + path + "\n"+ ex)
 		self.assertTrue(True)
 	
 	def test_grapher(self):
