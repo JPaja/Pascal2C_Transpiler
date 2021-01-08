@@ -1,6 +1,8 @@
 import unittest   
 import glob
 import sys
+
+from src.generator import Generator
 from src.parser import Parser
 from src.lexer import Lexer
 from src.grapher import Grapher
@@ -59,6 +61,21 @@ class Tests(unittest.TestCase):
 				ast = parser.parse()
 				symbolizer = Symbolizer(ast)
 				symbolizer.symbolize()
+
+		self.assertTrue(True)
+
+	def test_grapher(self):
+		for path in glob.glob("test/grader/02/src.pas"):
+			with open(path, 'r') as source:
+				print(f"testing {path}")
+				text = source.read()
+				lexer = Lexer(text)
+				tokens = lexer.lex()
+				parser = Parser(tokens)
+				ast = parser.parse()
+				grapher = Generator(ast)
+				grapher.generate()
+				grapher.write('tmp/sample.c')
 
 		self.assertTrue(True)
 
