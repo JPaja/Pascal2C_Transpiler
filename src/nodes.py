@@ -95,7 +95,11 @@ class Block(Node):
     def __init__(self, nodes):
         self.nodes = nodes
 
-
+class FormatArg(Node):
+    def __init__(self, arg,left,right):
+        self.arg = arg
+        self.left = left
+        self.right = right
 
 class Args(Node):
     def __init__(self, args):

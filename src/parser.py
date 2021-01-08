@@ -231,7 +231,10 @@ class Parser:
         self.eat(Class.ID)
         if self.curr.class_ == Class.LPAREN:
             self.eat(Class.LPAREN)
-            args = self.args()
+            if id_.value in ['write','writeln','read','readln']:
+                args = self.formatargs()
+            else:
+                args = self.args()
             self.eat(Class.RPAREN)
             return FuncCall(id_, args)
         elif self.curr.class_ == Class.ASSIGN:
@@ -255,8 +258,30 @@ class Parser:
         args = []
         while self.curr.class_ != Class.RPAREN:
             if len(args) > 0:
+                if self.curr.class_ != Class.COMMA:
+                    a = 1
                 self.eat(Class.COMMA)
             args.append(self.expr())
+        return Args(args)
+    
+    def formatargs(self):
+        args = []
+        while self.curr.class_ != Class.RPAREN:
+            if len(args) > 0:
+                self.eat(Class.COMMA)
+            expr = self.expr()
+            left = 0
+            right = 0
+            if self.curr.class_ == Class.Colon:
+                self.eat(Class.Colon)
+                left =  self.curr.lexeme
+                self.eat(Class.INT)
+            if self.curr.class_ == Class.Colon:
+                self.eat(Class.Colon)
+                right =  self.curr.lexeme
+                self.eat(Class.INT)
+            args.append(FormatArg(expr,left,right))
+            
         return Args(args)
 
     def logic(self):
@@ -265,27 +290,27 @@ class Parser:
             if self.curr.class_ == Class.AND:
                 op = self.curr.lexeme
                 self.eat(Class.AND)
-                second = self.logic()
+                second = self.compare()
                 first =  BinOp(op, first, second)
             elif self.curr.class_ == Class.OR:
                 op = self.curr.lexeme
                 self.eat(Class.OR)
-                second = self.logic()
+                second = self.compare()
                 first =  BinOp(op, first, second)
             elif self.curr.class_ == Class.XOR:
                 op = self.curr.lexeme
                 self.eat(Class.XOR)
-                second = self.logic()
+                second = self.compare()
                 first = BinOp(op, first, second)
         return first
 
     def factor(self):
         if self.curr.class_ == Class.INT:
-            no =  self.curr.lexeme;
+            no =  self.curr.lexeme
             self.eat(Class.INT)
             return Int(no)
         elif self.curr.class_ == Class.Float:
-            no =  self.curr.lexeme;
+            no =  self.curr.lexeme
             self.eat(Class.Float)
             return Float(no)
         elif self.curr.class_ == Class.CHAR:
@@ -320,7 +345,17 @@ class Parser:
             self.die_deriv(self.factor.__name__)
 
     def term(self):
-        first = self.factor()
+        #c = self.curr.class_
+        #if(c == Class.LPAREN):
+        #    self.eat(Class.LPAREN)
+
+        if(self.curr.class_ == Class.LPAREN):
+            self.eat(Class.LPAREN)
+            first = self.expr()
+            self.eat(Class.RPAREN)
+        else:
+            first = self.factor()
+            
         while self.curr.class_ in [Class.STAR, Class.FWDSLASH, Class.DIV,Class.MOD]:
             if self.curr.class_ == Class.STAR:
                 op = self.curr.lexeme
@@ -342,12 +377,17 @@ class Parser:
                 self.eat(Class.MOD)
                 second = self.factor()
                 first = BinOp(op, first, second)
+        #if(c == Class.LPAREN):
+        #    self.eat(Class.RPAREN)
         return first
 
     def expr(self):
         return self.logic()
 
     def expr2(self):
+        #c = self.curr.class_
+        #if(c == Class.LPAREN):
+        #    self.eat(Class.LPAREN)
         first = self.term()
         while self.curr.class_ in [Class.PLUS, Class.MINUS]:
             if self.curr.class_ == Class.PLUS:
@@ -360,6 +400,8 @@ class Parser:
                 self.eat(Class.MINUS)
                 second = self.term()
                 first = BinOp(op, first, second)
+        #if(c == Class.LPAREN):
+        #    self.eat(Class.RPAREN)
         return first
 
     def compare(self):
