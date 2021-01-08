@@ -117,13 +117,14 @@ class Continue(Node):
     def __init__(self):
         return
 
-class Repeat(Node):
-    def __init__(self):
-        return
+# class Repeat(Node):
+#     def __init__(self):
+#         return
 
 class Until(Node):
-    def __init__(self,cond):
+    def __init__(self,cond, nodes):
         self.cond = cond
+        self.nodes = nodes
 
 class Type(Node):
     def __init__(self, value):
