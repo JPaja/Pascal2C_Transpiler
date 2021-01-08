@@ -36,7 +36,11 @@ class Generator(Visitor):
         for n in node.funcs:
             self.visit(node, n)
         self.append("int main() ")
+        self.append("{")
         self.visit(node, node.main)
+        self.append("return 0;")
+        self.newline()
+        self.append("}")
 
     def visit_FuncImpl(self, parent, node):
         self.visit(node.type_)
@@ -50,7 +54,11 @@ class Generator(Visitor):
             self.visit(node, n)
         self.append(')')
         self.newline()
+        self.append("{")
+        self.level += 1
         self.visit(node, node.body)
+        self.level -= 1
+        self.append("}")
 
     def visit_ProcImpl(self, parent, node):
         self.append('void ')
@@ -63,18 +71,19 @@ class Generator(Visitor):
             self.visit(node, n)
         self.append(')')
         self.newline()
+        self.append("{")
+        self.level += 1
         self.visit(node, node.body)
+        self.level -= 1
+        self.append("}")
 
 
     def visit_Body(self, parent, node):
-        self.append("{")
+
         self.newline()
-        self.level += 1
         for n in node.variables:
             self.visit(node, n)
         self.visit(node, node.block)
-        self.level -= 1
-        self.append("}")
 
     def getType(self, type_):
         if type_ is Type:
@@ -121,7 +130,10 @@ class Generator(Visitor):
         self.newline()
 
     def visit_Type(self, parent, node):
-        self.append(node.value)
+        if node.value == 'integer':
+            self.append('int')
+        else:
+            self.append(node.value)
 
     def visit_SzArray(self, parent, node):
         self.append(node.type_)
@@ -236,8 +248,19 @@ class Generator(Visitor):
 
 
     def visit_FuncCall(self, parent, node):
-        self.visit(node,node.id_)
-        self.visit(node,node.args)
+        id_ = node.id_.value
+        if(id_ in ['readln','read','write','writeln']):
+            if id_ in ['readln','read']:
+                self.append('scanf')
+                self.visit_FormatedArgs(node, node.args, True)
+            elif id_ in ['write','writeln']:
+                self.append('printf')
+                self.visit_FormatedArgs(node, node.args, False)
+        elif id_ in ['chr', 'ord']:
+            self.visit(node, node.args.args[0])
+        else:
+            self.visit(node,node.id_)
+            self.visit(node,node.args)
 
     def visit_Block(self, parent, node):
         self.newline()
@@ -267,6 +290,21 @@ class Generator(Visitor):
             i+=1
             self.visit(node, n)
         self.append(')')
+
+    def visit_FormatedArgs(self, parent, node, write):
+        self.append('(\"')
+        for n in node.args:
+            self.append(self.scanType(n))
+        self.append('\"')
+        for n in node.args:
+            self.append(', ')
+            if write:
+                self.append('&')
+            self.visit(node, n)
+        self.append(')')
+
+    def scanType(self, arg):
+        return '%d'
 
     def visit_FormatArg(self, parent, node):
         #TODO Detect printf and scanf parameters
@@ -339,7 +377,14 @@ class Generator(Visitor):
     def visit_BinOp(self, parent, node):
         name = node.symbol
         self.visit(node, node.first)
-        self.append(name)
+        self.append(' ')
+        if(name == 'div'):
+            self.append('/')
+        elif(name == 'mod'):
+            self.append('%')
+        else:
+            self.append(name)
+        self.append(' ')
         self.visit(node, node.second)
 
     def visit_UnOp(self, parent, node):
