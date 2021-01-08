@@ -275,16 +275,18 @@ class Parser:
             if len(args) > 0:
                 self.eat(Class.COMMA)
             expr = self.expr()
-            left = 0
-            right = 0
+            left = None
+            right = None
             if self.curr.class_ == Class.Colon:
                 self.eat(Class.Colon)
-                left =  self.curr.lexeme
+                no = self.curr.lexeme
                 self.eat(Class.INT)
+                left = Int(no)
             if self.curr.class_ == Class.Colon:
                 self.eat(Class.Colon)
-                right =  self.curr.lexeme
+                no = self.curr.lexeme
                 self.eat(Class.INT)
+                right = Int(no)
             args.append(FormatArg(expr,left,right))
             
         return Args(args)

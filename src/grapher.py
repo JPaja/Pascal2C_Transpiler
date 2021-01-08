@@ -68,10 +68,15 @@ class Grapher(Visitor):
 
     def visit_If(self, parent, node):
         self.add_node(parent, node)
+        for statement in node.statements:
+            self.visit(node, statement)
+        if(node.else_block is not None):
+            self.visit(node, node.else_block)
+
+    def visit_IfStatement(self, parent, node):
+        self.add_node(parent, node)
         self.visit(node, node.cond)
-        self.visit(node, node.true)
-        if node.false is not None:
-            self.visit(node, node.false)
+        self.visit(node, node.block)
 
     def visit_While(self, parent, node):
         self.add_node(parent, node)
@@ -119,6 +124,15 @@ class Grapher(Visitor):
         for a in node.args:
             self.visit(node, a)
 
+    def visit_FormatArg(self, parent, node):
+        self.add_node(parent, node)
+        self.visit(node, node.arg)
+        if node.left is not None:
+            self.visit(node, node.left)
+        if node.right is not None:
+            self.visit(node, node.right)
+
+
     def visit_Elems(self, parent, node):
         self.add_node(parent, node)
         for e in node.values:
@@ -145,6 +159,10 @@ class Grapher(Visitor):
         self.add_node(parent, node, name)
 
     def visit_Int(self, parent, node):
+        name = node.value
+        self.add_node(parent, node, name)
+
+    def visit_Float(self, parent, node):
         name = node.value
         self.add_node(parent, node, name)
 
