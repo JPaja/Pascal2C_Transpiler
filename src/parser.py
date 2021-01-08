@@ -143,32 +143,37 @@ class Parser:
 
     def block(self):
         self.eat(Class.BEGIN)
+        nodes = self.nodes_untill(Class.END)
+        self.eat(Class.END)
+        return Block(nodes)
+
+    def nodes_untill(self, token):
         nodes = []
-        while self.curr.class_ != Class.END:
+        while self.curr.class_ != token:
             if self.curr.class_ == Class.ID:
                 nodes.append(self.id_())
                 self.eat(Class.SEMICOLON)
-            elif(self.curr.class_ == Class.Exit):
+            elif (self.curr.class_ == Class.Exit):
                 self.eat(Class.Exit)
                 arg = None
-                if(self.curr.class_ == Class.LPAREN):
+                if (self.curr.class_ == Class.LPAREN):
                     self.eat(Class.LPAREN)
                     arg = self.expr()
                     self.eat(Class.RPAREN)
                 self.eat(Class.SEMICOLON)
                 nodes.append(Exit(arg))
-            elif(self.curr.class_ == Class.BREAK):
+            elif (self.curr.class_ == Class.BREAK):
                 nodes.append(Break())
                 self.eat(Class.BREAK)
                 self.eat(Class.SEMICOLON)
-            elif(self.curr.class_ == Class.CONTINUE):
+            elif (self.curr.class_ == Class.CONTINUE):
                 nodes.append(Continue())
                 self.eat(Class.CONTINUE)
                 self.eat(Class.SEMICOLON)
-            elif(self.curr.class_ == Class.REPEAT):
+            elif (self.curr.class_ == Class.REPEAT):
                 nodes.append(Repeat())
                 self.eat(Class.REPEAT)
-            elif(self.curr.class_ == Class.UNIIL):
+            elif (self.curr.class_ == Class.UNIIL):
                 self.eat(Class.UNIIL)
                 cond = self.logic()
                 nodes.append(Until(cond))
@@ -184,8 +189,7 @@ class Parser:
                 self.eat(Class.SEMICOLON)
             else:
                 self.die_deriv(self.block.__name__)
-        self.eat(Class.END)
-        return Block(nodes)
+        return nodes
 
     def for_(self):
         self.eat(Class.FOR)
@@ -291,7 +295,7 @@ class Parser:
                 op = self.curr.lexeme
                 self.eat(Class.AND)
                 second = self.compare()
-                first =  BinOp(op, first, second)
+                first = BinOp(op, first, second)
             elif self.curr.class_ == Class.OR:
                 op = self.curr.lexeme
                 self.eat(Class.OR)
@@ -345,11 +349,7 @@ class Parser:
             self.die_deriv(self.factor.__name__)
 
     def term(self):
-        #c = self.curr.class_
-        #if(c == Class.LPAREN):
-        #    self.eat(Class.LPAREN)
-
-        if(self.curr.class_ == Class.LPAREN):
+        if self.curr.class_ == Class.LPAREN:
             self.eat(Class.LPAREN)
             first = self.expr()
             self.eat(Class.RPAREN)
@@ -377,17 +377,12 @@ class Parser:
                 self.eat(Class.MOD)
                 second = self.factor()
                 first = BinOp(op, first, second)
-        #if(c == Class.LPAREN):
-        #    self.eat(Class.RPAREN)
         return first
 
     def expr(self):
         return self.logic()
 
     def expr2(self):
-        #c = self.curr.class_
-        #if(c == Class.LPAREN):
-        #    self.eat(Class.LPAREN)
         first = self.term()
         while self.curr.class_ in [Class.PLUS, Class.MINUS]:
             if self.curr.class_ == Class.PLUS:
@@ -400,8 +395,6 @@ class Parser:
                 self.eat(Class.MINUS)
                 second = self.term()
                 first = BinOp(op, first, second)
-        #if(c == Class.LPAREN):
-        #    self.eat(Class.RPAREN)
         return first
 
     def compare(self):
