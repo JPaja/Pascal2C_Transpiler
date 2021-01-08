@@ -88,6 +88,7 @@ class Grapher(Visitor):
         self.visit(node, node.init)
         self.visit(node, node.to)
         self.visit(node, node.block)
+        self.add_node(parent, node, node.downto)
 
     def visit_FuncImpl(self, parent, node):
         self.add_node(parent, node)

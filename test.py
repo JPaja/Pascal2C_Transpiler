@@ -4,6 +4,7 @@ import sys
 from src.parser import Parser
 from src.lexer import Lexer
 from src.grapher import Grapher
+from src.symbolizer import Symbolizer
 
 class Tests(unittest.TestCase):
 
@@ -45,6 +46,20 @@ class Tests(unittest.TestCase):
 				grapher = Grapher(ast)
 				dot = grapher.graph()
 				grapher.save()
-		self.assertTrue(True)               
+		self.assertTrue(True)
+
+	def test_symbolizer(self):
+		for path in glob.glob("test/grader/*/src.pas"):
+			with open(path, 'r') as source:
+				print(f"testing {path}")
+				text = source.read()
+				lexer = Lexer(text)
+				tokens = lexer.lex()
+				parser = Parser(tokens)
+				ast = parser.parse()
+				symbolizer = Symbolizer(ast)
+				symbolizer.symbolize()
+
+		self.assertTrue(True)
 
 #Tests().test_grapher()
