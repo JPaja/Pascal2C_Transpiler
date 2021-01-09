@@ -95,9 +95,9 @@ class Generator(Visitor):
     def getType(self, type_):
         if type_ is Type:
             return type_
-        if type is SzArray:
+        if isinstance(type_,SzArray):
             return type_.type_
-        if type is RangeArray:
+        if isinstance(type_,RangeArray):
             return type_.type_
         return type_
 
@@ -122,13 +122,14 @@ class Generator(Visitor):
                 self.append(',')
             i+=1
             self.visit(node, n)
-            if node.type_ is SzArray:
+            if isinstance(node.type_, SzArray):
                 self.append('[')
-                self.visit(node.type_.size)
+                self.visit(node.type_, node.type_.size)
                 self.append(']')
-            elif node.type_ is RangeArray:
+            elif isinstance(node.type_ , RangeArray):
                 self.append('[')
-                self.visit(node.type_.rightRange)
+                self.visit(node.type_, node.type_.rightRange)
+                #self.append(node.type_.rightRange)
                 self.append(']')
             if node.value is not None:
                 self.append('=')
@@ -168,7 +169,7 @@ class Generator(Visitor):
     def visit_ArrayElem(self, parent, node):
         self.visit(node, node.id_)
         self.append('[')
-        self.visit(node.index)
+        self.visit(node,node.index)
         self.append(']')
 
     def visit_Assign(self, parent, node):
@@ -242,9 +243,9 @@ class Generator(Visitor):
         self.append(';')
         self.visit(node.init,node.init.id_)
         if (node.downto):
-            self.append('++')
-        else:
             self.append('--')
+        else:
+            self.append('++')
         self.append(')')
         self.newline()
         self.indent()
