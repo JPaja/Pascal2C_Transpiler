@@ -391,6 +391,12 @@ class Generator(Visitor):
             self.append('/')
         elif(name == 'mod'):
             self.append('%')
+        elif (name == 'and'):
+            self.append('&&')
+        elif (name == 'or'):
+            self.append('||')
+        elif (name == 'xor'):
+            self.append('^')
         else:
             self.append(name)
         self.append(' ')
