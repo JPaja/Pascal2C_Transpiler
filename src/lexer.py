@@ -126,7 +126,12 @@ class Lexer:
 		elif self.is_keyword(curr):
 			return self.read_keyword()
 		elif curr == '\'':
-			return Token(Class.CHAR, self.read_char())
+			text = self.read_char()
+			if(len(text) > 1):
+				return Token(Class.STRING, text)
+			if(len(text) == 1):
+				return Token(Class.CHAR, text[0])
+			return Token(Class.CHAR,'')
 		elif curr == '"':
 			return Token(Class.STRING, self.read_string())
 		elif curr == ':':
