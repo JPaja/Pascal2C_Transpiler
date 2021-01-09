@@ -140,6 +140,8 @@ class Generator(Visitor):
             self.append('int')
         elif node.value == 'boolean':
             self.append('bool')
+        elif node.value == 'real':
+            self.append('float')
         else:
             self.append(node.value)
 

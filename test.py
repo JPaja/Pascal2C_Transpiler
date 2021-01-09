@@ -65,7 +65,7 @@ class Tests(unittest.TestCase):
 		self.assertTrue(True)
 
 	def test_grapher(self):
-		for path in glob.glob("test/grader/05/src.pas"):
+		for path in glob.glob("test/grader/06/src.pas"):
 			with open(path, 'r') as source:
 				print(f"testing {path}")
 				text = source.read()
