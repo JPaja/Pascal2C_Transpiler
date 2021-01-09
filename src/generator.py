@@ -232,21 +232,21 @@ class Generator(Visitor):
         self.append('for(')
         self.visit(node, node.init)
         self.append(';')
-        if node.init is not Assign:
+        if isinstance(node.init,Assign) is False:
             self.die("For init is not assign")
-        self.visit(node.init.id_)
+        self.visit(node.init,node.init.id_)
         if(node.downto):
             self.append('>=')
         else:
             self.append('<=')
         self.visit(node, node.to)
         self.append(';')
-        self.visit(node.init.id_)
+        self.visit(node.init,node.init.id_)
         if (node.downto):
             self.append('++')
         else:
             self.append('--')
-        self.append('for)')
+        self.append(')')
         self.newline()
         self.indent()
         self.append('{')
@@ -262,10 +262,10 @@ class Generator(Visitor):
         if(id_ in ['readln','read','write','writeln']):
             if id_ in ['readln','read']:
                 self.append('scanf')
-                self.visit_FormatedArgs(node, node.args, True)
+                self.visit_FormatedArgs(node.id_, node.args, True)
             elif id_ in ['write','writeln']:
                 self.append('printf')
-                self.visit_FormatedArgs(node, node.args, False)
+                self.visit_FormatedArgs(node.id_, node.args, False)
         elif id_ in ['chr', 'ord']:
             self.visit(node, node.args.args[0])
         else:
@@ -305,6 +305,8 @@ class Generator(Visitor):
         self.append('(\"')
         for n in node.args:
             self.append(self.scanType(n))
+        if(parent.value == 'writeln'):
+            self.append('\\n')
         self.append('\"')
         for n in node.args:
             self.append(', ')
