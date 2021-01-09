@@ -14,7 +14,7 @@ class Generator(Visitor):
         self.py += str(text)
 
     def newline(self):
-        self.append('\n\r')
+        self.append('\n')
 
     def indent(self):
         for i in range(self.level):
@@ -49,9 +49,12 @@ class Generator(Visitor):
         self.append('(')
         i = 0
         for n in node.params:
-            if i != 0:
-                self.append(',')
-            self.visit(node, n)
+            for p in n.ids_:
+                if i != 0:
+                    self.append(',')
+                self.visit(node, n.type_)
+                self.append(' ')
+                self.visit(node, p)
         self.append(')')
         self.newline()
         self.append("{")
@@ -62,13 +65,17 @@ class Generator(Visitor):
 
     def visit_ProcImpl(self, parent, node):
         self.append('void ')
-        self.visit(node.id_)
+        self.visit(node,node.id_)
         self.append('(')
         i = 0
         for n in node.params:
-            if i != 0:
-                self.append(',')
-            self.visit(node, n)
+            for p in n.ids_:
+                if i != 0:
+                    self.append(',')
+                i += 1
+                self.visit(node, n.type_)
+                self.append(' ')
+                self.visit(node, p)
         self.append(')')
         self.newline()
         self.append("{")
@@ -79,7 +86,6 @@ class Generator(Visitor):
 
 
     def visit_Body(self, parent, node):
-
         self.newline()
         for n in node.variables:
             self.visit(node, n)
@@ -132,6 +138,8 @@ class Generator(Visitor):
     def visit_Type(self, parent, node):
         if node.value == 'integer':
             self.append('int')
+        elif node.value == 'boolean':
+            self.append('bool')
         else:
             self.append(node.value)
 
@@ -376,6 +384,7 @@ class Generator(Visitor):
 
     def visit_BinOp(self, parent, node):
         name = node.symbol
+        self.append('(')
         self.visit(node, node.first)
         self.append(' ')
         if(name == 'div'):
@@ -386,6 +395,7 @@ class Generator(Visitor):
             self.append(name)
         self.append(' ')
         self.visit(node, node.second)
+        self.append(')')
 
     def visit_UnOp(self, parent, node):
         name = node.symbol
