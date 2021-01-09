@@ -1,6 +1,8 @@
 import unittest   
 import glob
 import sys
+import os
+import subprocess as sp
 
 from src.generator import Generator
 from src.parser import Parser
@@ -65,7 +67,7 @@ class Tests(unittest.TestCase):
 		self.assertTrue(True)
 
 	def test_grapher(self):
-		for path in glob.glob("test/grader/16/src.pas"):
+		for path in glob.glob("test/grader/*/src.pas"):
 			with open(path, 'r') as source:
 				print(f"testing {path}")
 				text = source.read()
@@ -73,10 +75,30 @@ class Tests(unittest.TestCase):
 				tokens = lexer.lex()
 				parser = Parser(tokens)
 				ast = parser.parse()
-				grapher = Generator(ast)
+				symbolizer = Symbolizer(ast)
+				symbolizer.symbolize()
+				grapher = Generator(ast,symbolizer)
 				grapher.generate()
-				grapher.write('tmp/sample.c')
-
+				dir = os.path.dirname(path)
+				sol = os.path.join(dir, 'src.c')
+				out = os.path.join(dir, 'out')
+				if os.path.exists(sol):
+					os.remove(sol)
+				if os.path.exists(out):
+					os.remove(out)
+				grapher.write(sol)
+				p = None
+				try:
+					p = sp.Popen(['gcc', sol, '-o', out], stdout=sp.PIPE)
+					retCode = p.wait()
+					self.assertTrue(retCode == 0)
+					#s = str(p.stdout.read())
+					#self.assertTrue(s == '')
+				except:
+					print('Fek')
+					self.assertTrue(False)
+				if p is not None:
+					p.stdout.close()
 		self.assertTrue(True)
 
 #Tests().test_grapher()

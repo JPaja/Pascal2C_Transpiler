@@ -1,3 +1,6 @@
+void fun1(int);
+void fun2(int,int);
+
 void fun1(int a) {
 	fun2(a, 999);
 }

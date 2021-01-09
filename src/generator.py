@@ -5,9 +5,10 @@ import os
 
 
 class Generator(Visitor):
-    def __init__(self, ast):
+    def __init__(self, ast, symbolizer):
         self.ast = ast
         self.py = ""
+        self.symbolizer = symbolizer
         self.level = 0
 
     def append(self, text):
@@ -26,8 +27,10 @@ class Generator(Visitor):
         return self.py
 
     def write(self, path):
+        res = '#include <stdio.h>\n\n'
+        res += self.py
         with open(path, 'w') as source:
-            source.write(self.py)
+            source.write(res)
         return path
     def die(self, text):
         raise SystemExit(text)
@@ -147,7 +150,7 @@ class Generator(Visitor):
         if node.value == 'integer':
             self.append('int')
         elif node.value == 'boolean':
-            self.append('bool')
+            self.append('int')
         elif node.value == 'real':
             self.append('float')
         elif node.value == 'string':
