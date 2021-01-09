@@ -381,8 +381,10 @@ class Generator(Visitor):
 
     def scanType(self,parent, arg, left, right):
         if isinstance(arg, Id):
-            if id in self.varMap:
-                return self.scanType(arg, self.varMap[arg], left, right)
+            for id_,type_ in self.varMap.items():
+                if id_.value != arg.value:
+                    continue
+                return self.scanType(arg, type_, left, right)
             return None
         if isinstance(arg, ArrayElem):
             return self.scanType(arg, arg.id_, left, right)
@@ -393,10 +395,10 @@ class Generator(Visitor):
         if isinstance(arg, UnOp):
             return self.scanType(arg, arg.first, left, right)
         prefix = '%'
-        if left is not None and isinstance(left, Int):
-            prefix += str(left.value) + '.'
-        if right is not None and isinstance(right, Int):
-            prefix += str(right.value)
+        if left is not None and isinstance(left, Int) and left.value != 0:
+            prefix += str(left.value)
+        if right is not None and isinstance(right, Int) and right.value != 0:
+            prefix += '.' + str(right.value)
         if isinstance(arg, Int) or isinstance(arg, Bool):
             return prefix+'d'
         if isinstance(arg, Real):
