@@ -316,6 +316,10 @@ class Parser:
             no =  self.curr.lexeme
             self.eat(Class.INT)
             return Int(no)
+        if self.curr.class_ == Class.BOOL:
+            no = self.curr.lexeme
+            self.eat(Class.BOOL)
+            return Bool(no)
         elif self.curr.class_ == Class.Float:
             no =  self.curr.lexeme
             self.eat(Class.Float)

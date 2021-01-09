@@ -7,16 +7,16 @@ int jeProst(int n)
 	int i;
 	if((n <= 1))
 	{
-		return false;
+		return 1;
 	};
 	for(i=(n / 2);i>=2;i--)
 	{
 		if(((n % i) == 0))
 		{
-			return false;
+			return 1;
 		};
 	};
-	return true;
+	return 0;
 }int main() {
 int n,i,s;
 scanf("%d", &n);
@@ -31,7 +31,7 @@ do {	if(jeProst(s))
 		};
 	};
 	s=(s + 1);
-}while(false);
+}while(1);
 printf("%d\n", s);
 return 0;
 }

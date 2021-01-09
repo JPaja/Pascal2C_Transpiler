@@ -388,7 +388,7 @@ class Generator(Visitor):
         self.append('}')
 
     def visit_Exit(self, parent, node):
-        self.append('return ');
+        self.append('return ')
         if node.arg is not None:
             self.visit(node, node.arg)
         # else:
@@ -421,6 +421,13 @@ class Generator(Visitor):
     def visit_Int(self, parent, node):
         name = node.value
         self.append(name)
+
+    def visit_Bool(self, parent, node):
+        name = node.value
+        if(name is True):
+            self.append('0')
+        else:
+            self.append('1')
 
     def visit_Float(self, parent, node):
         name = node.value

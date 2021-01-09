@@ -104,6 +104,9 @@ class Symbolizer(Visitor):
     def visit_Int(self, parent, node):
         pass
 
+    def visit_Bool(self, parent, node):
+        pass
+
     def visit_Float(self, parent, node):
         pass
 

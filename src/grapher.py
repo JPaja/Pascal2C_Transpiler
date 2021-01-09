@@ -163,6 +163,10 @@ class Grapher(Visitor):
         name = node.value
         self.add_node(parent, node, name)
 
+    def visit_Bool(self, parent, node):
+        name = node.value
+        self.add_node(parent, node, name)
+
     def visit_Float(self, parent, node):
         name = node.value
         self.add_node(parent, node, name)

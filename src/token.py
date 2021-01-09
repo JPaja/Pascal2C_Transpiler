@@ -10,6 +10,7 @@ class Class(Enum):
     TYPE = auto()
     INT = auto()
     Float = auto()
+    BOOL = auto()
     CHAR = auto()
     STRING = auto()
 

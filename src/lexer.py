@@ -91,6 +91,11 @@ class Lexer:
 			return Token(Class.Array, lexeme)
 		elif lexeme == 'exit':
 			return Token(Class.Exit, lexeme)
+		elif lexeme == 'true':
+			return Token(Class.BOOL, True)
+		elif lexeme == 'false':
+			return Token(Class.BOOL, False)
+
 		return Token(Class.ID, lexeme)
 
 	def next_char(self):

@@ -94,7 +94,7 @@ class Tests(unittest.TestCase):
 					self.assertTrue(retCode == 0)
 					#s = str(p.stdout.read())
 					#self.assertTrue(s == '')
-				except:
+				except Exception:
 					print('Fek')
 					self.assertTrue(False)
 				if p is not None:

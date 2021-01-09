@@ -131,6 +131,10 @@ class Int(Node):
     def __init__(self, value):
         self.value = value
 
+class Bool(Node):
+    def __init__(self, value):
+        self.value = value
+
 class Float(Node):
     def __init__(self, value):
         self.value = value
