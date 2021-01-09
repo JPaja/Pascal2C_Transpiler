@@ -29,7 +29,7 @@ char cifra_stotina(char s)
 char s[100] = {0},t[100] = {0};
 char ascii,tmp;
 int i,j,len;
-scanf("%d", &s);
+scanf("None", &s);
 i=1;
 j=1;
 len=strlen(s);
@@ -48,6 +48,6 @@ while((i <= len))
 	t[j] = cifra_jedinica(ascii);
 	j = j + 1;
 };
-printf("%d", t);
+printf("None", t);
 return 0;
 }

@@ -4,7 +4,7 @@
 
 int main() {
 float a,b;
-scanf("%d%d", &a, &b);
-printf("%d%d%d%d%d", (a + b), ' ', (a - b), ' ', (a / b));
+scanf("NoneNone", &a, &b);
+printf("None%cNone%cNone", (a + b), ' ', (a - b), ' ', (a / b));
 return 0;
 }

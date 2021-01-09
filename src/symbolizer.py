@@ -14,6 +14,7 @@ class Symbolizer(Visitor):
         node.symbols = Symbols()
         for n in node.funcs:
             self.visit(node, n)
+        self.visit(node, node.main)
 
     def visit_Body(self, parent, node):
         node.symbols = Symbols()
@@ -32,14 +33,18 @@ class Symbolizer(Visitor):
 
     def visit_Decl(self, parent, node):
         for id_ in node.ids_:
-            parent.symbols.put(id_.value, self.getType(node.type_).value, id(parent))
+            parent.symbols.put(id_, node.type_, id(parent))
 
     def visit_FuncImpl(self, parent, node):
-        parent.symbols.put(node.id_.value, self.getType(node.type_).value, id(parent))
+        node.symbols = Symbols()
+        parent.symbols.put(node.id_, node.type_, id(parent))
+        self.visit(node, node.body)
 
     def visit_ProcImpl(self, parent, node):
         # TODO: Check what to do for type
-        parent.symbols.put(node.id_.value, 'procedure', id(parent))
+        node.symbols = Symbols()
+        parent.symbols.put(node.id_, Type('void'), id(parent))
+        self.visit(node, node.body)
 
     def visit_SzArray(self, parent, node):
         pass

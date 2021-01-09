@@ -7,10 +7,10 @@ int a[100];
 int i,n,max,tmax;
 max=-32768;
 tmax=0;
-scanf("%d", &n);
+scanf("None", &n);
 for(i=1;i<=n;i++)
 {
-	scanf("%d", &a[i]);
+	scanf("None", &a[i]);
 };
 for(i=1;i<=n;i++)
 {
@@ -24,6 +24,6 @@ for(i=1;i<=n;i++)
 		tmax=0;
 	};
 };
-printf("%d", max);
+printf("None", max);
 return 0;
 }

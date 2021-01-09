@@ -4,7 +4,7 @@
 
 int main() {
 char c;
-scanf("%d", &c);
-printf("%d", (c - 32));
+scanf("None", &c);
+printf("None", (c - 32));
 return 0;
 }

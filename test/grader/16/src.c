@@ -11,10 +11,10 @@ void fun1(int a)
 	fun1((a + 1));
 }int main() {
 int n;
-scanf("%d", &n);
+scanf("None", &n);
 if((n == 1))
 {
-	printf("%d", n);
+	printf("None", n);
 }else if((n == 2))
 {
 	n=3.14;

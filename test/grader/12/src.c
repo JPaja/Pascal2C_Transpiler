@@ -9,10 +9,10 @@ for(i=1;i<=1005;i++)
 {
 	a[i]=0;
 };
-scanf("%d", &n);
+scanf("None", &n);
 for(i=1;i<=n;i++)
 {
-	scanf("%d", &x);
+	scanf("None", &x);
 	a[x]=(a[x] + 1);
 };
 max=-1;
@@ -24,6 +24,6 @@ for(i=1;i<=1005;i++)
 		br=i;
 	};
 };
-printf("%d%d%d", br, ' ', max);
+printf("None%cNone", br, ' ', max);
 return 0;
 }

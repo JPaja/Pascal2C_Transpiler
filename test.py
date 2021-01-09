@@ -66,7 +66,7 @@ class Tests(unittest.TestCase):
 
 		self.assertTrue(True)
 
-	def test_grapher(self):
+	def test_generator(self):
 		for path in glob.glob("test/grader/*/src.pas"):
 			with open(path, 'r') as source:
 				print(f"testing {path}")

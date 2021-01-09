@@ -7,10 +7,10 @@ int a[100],b[100],c[100];
 int n,ai,bi,ci,i;
 bi=1;
 ci=1;
-scanf("%d", &n);
+scanf("None", &n);
 for(ai=1;ai<=n;ai++)
 {
-	scanf("%d", &a[ai]);
+	scanf("None", &a[ai]);
 };
 for(ai=1;ai<=n;ai++)
 {
@@ -26,12 +26,12 @@ for(ai=1;ai<=n;ai++)
 };
 for(i=1;i<=(bi - 1);i++)
 {
-	printf("%d%d", b[i], ' ');
+	printf("None%c", b[i], ' ');
 };
 printf("\n");
 for(i=1;i<=(ci - 1);i++)
 {
-	printf("%d%d", c[i], ' ');
+	printf("None%c", c[i], ' ');
 };
 return 0;
 }

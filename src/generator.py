@@ -1,4 +1,7 @@
-from src.nodes import Type, SzArray, RangeArray, Assign, Id, FuncImpl
+from numbers import Real
+
+from src.nodes import Type, SzArray, RangeArray, Assign, Id, FuncImpl, Int, Bool, String, Char, FormatArg, ArrayElem, \
+    FuncCall, BinOp, UnOp
 from src.visitor import Visitor
 import re
 import os
@@ -10,6 +13,7 @@ class Generator(Visitor):
         self.py = ""
         self.symbolizer = symbolizer
         self.level = 0
+        self.varMap = {}
 
     def append(self, text):
         self.py += str(text)
@@ -69,6 +73,8 @@ class Generator(Visitor):
         self.newline()
 
     def visit_FuncImpl(self, parent, node):
+        for symb in node.symbols:
+            self.varMap[symb.id_] = symb.type_
         self.visit(node, node.type_)
         self.append(' ')
         self.visit(node, node.id_)
@@ -91,6 +97,8 @@ class Generator(Visitor):
         self.append("}")
 
     def visit_ProcImpl(self, parent, node):
+        for symb in node.symbols:
+            self.varMap[symb.id_] = symb.type_
         self.append('void ')
         self.visit(node,node.id_)
         self.append('(')
@@ -113,6 +121,9 @@ class Generator(Visitor):
 
 
     def visit_Body(self, parent, node):
+        for symb in node.symbols:
+            self.varMap[symb.id_] = symb.type_
+
         self.newline()
         for n in node.variables:
             self.visit(node, n)
@@ -352,7 +363,12 @@ class Generator(Visitor):
     def visit_FormatedArgs(self, parent, node, write):
         self.append('(\"')
         for n in node.args:
-            self.append(self.scanType(n))
+            left = None
+            right = None
+            if isinstance(n, FormatArg):
+                left = n.left
+                right = n.right
+            self.append(self.scanType(node, n.arg, left, right))
         if(parent.value == 'writeln'):
             self.append('\\n')
         self.append('\"')
@@ -363,8 +379,41 @@ class Generator(Visitor):
             self.visit(node, n)
         self.append(')')
 
-    def scanType(self, arg):
-        return '%d'
+    def scanType(self,parent, arg, left, right):
+        if isinstance(arg, Id):
+            if id in self.varMap:
+                return self.scanType(arg, self.varMap[arg], left, right)
+            return None
+        if isinstance(arg, ArrayElem):
+            return self.scanType(arg, arg.id_, left, right)
+        if isinstance(arg, FuncCall):
+            return self.scanType(arg, arg.id_, left, right)
+        if isinstance(arg, BinOp):
+            return self.scanType(arg, arg.first, left, right)
+        if isinstance(arg, UnOp):
+            return self.scanType(arg, arg.first, left, right)
+        prefix = '%'
+        if left is not None and isinstance(left, Int):
+            prefix += str(left.value) + '.'
+        if right is not None and isinstance(right, Int):
+            prefix += str(right.value)
+        if isinstance(arg, Int) or isinstance(arg, Bool):
+            return prefix+'d'
+        if isinstance(arg, Real):
+            return prefix+'f'
+        if isinstance(arg, Char) and len(arg.value) == 1:
+            return prefix+'c'
+        if isinstance(arg, String) or isinstance(arg, Char):
+            return prefix+'s'
+        if isinstance(arg, Type):
+            name = arg.value
+            if name == 'integer':
+                return prefix+'d'
+            elif name == 'real':
+                return prefix+'f'
+            elif name == 'string':
+                return prefix+'s'
+        return None
 
     def visit_FormatArg(self, parent, node):
         #TODO Detect printf and scanf parameters

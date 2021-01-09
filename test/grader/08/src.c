@@ -19,7 +19,7 @@ int jeProst(int n)
 	return 0;
 }int main() {
 int n,i,s;
-scanf("%d", &n);
+scanf("None", &n);
 i=0;
 s=1;
 do {	if(jeProst(s))
@@ -32,6 +32,6 @@ do {	if(jeProst(s))
 	};
 	s=(s + 1);
 }while(1);
-printf("%d\n", s);
+printf("None\n", s);
 return 0;
 }
