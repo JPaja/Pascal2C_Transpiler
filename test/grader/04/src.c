@@ -1,19 +1,21 @@
 #include <stdio.h>
+#include <string.h>
 
+void check_arm(int,int,int,int);
 void check_arm(int x,int cj,int cd,int cs)
 {
-	bool arm;
+	int arm;
 	if((x < 0))
 	{
-		return 0;
+		return ;
 	};
 	arm=(x == ((((cj * cj) * cj) + ((cd * cd) * cd)) + ((cs * cs) * cs)));
 	if(arm)
 	{
-		printf("%d", 'DA');
+		printf("%d", "DA");
 	}	else
 	{
-		printf("%d", 'NE');
+		printf("%d", "NE");
 	};
 }int main() {
 int broj,cj,cd,cs;

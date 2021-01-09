@@ -1,4 +1,4 @@
-from src.nodes import Type, SzArray, RangeArray, Assign, Id
+from src.nodes import Type, SzArray, RangeArray, Assign, Id, FuncImpl
 from src.visitor import Visitor
 import re
 import os
@@ -27,7 +27,8 @@ class Generator(Visitor):
         return self.py
 
     def write(self, path):
-        res = '#include <stdio.h>\n\n'
+        res = '#include <stdio.h>\n' \
+              '#include <string.h>\n\n'
         res += self.py
         with open(path, 'w') as source:
             source.write(res)
@@ -36,6 +37,10 @@ class Generator(Visitor):
         raise SystemExit(text)
 
     def visit_Program(self, parent, node):
+
+        for n in node.funcs:
+            self.visit_FuncSig(node, n)
+        self.newline()
         for n in node.funcs:
             self.visit(node, n)
         self.append("int main() ")
@@ -44,6 +49,24 @@ class Generator(Visitor):
         self.append("return 0;")
         self.newline()
         self.append("}")
+
+    def visit_FuncSig(self, parent, node):
+        if isinstance(node, FuncImpl):
+            self.visit(node, node.type_)
+        else:
+            self.append('void')
+        self.append(' ')
+        self.visit(node, node.id_)
+        self.append('(')
+        i = 0
+        for n in node.params:
+            for p in n.ids_:
+                if i != 0:
+                    self.append(',')
+                i += 1
+                self.visit(node, n.type_)
+        self.append(');')
+        self.newline()
 
     def visit_FuncImpl(self, parent, node):
         self.visit(node, node.type_)
@@ -284,6 +307,9 @@ class Generator(Visitor):
             self.append(" = ")
             self.visit(node, node.args.args[0])
             self.append(" + 1")
+        elif id_ == 'length' and len(node.args.args) == 1:
+            self.append('strlen')
+            self.visit(node,node.args)
         elif id_ == 'insert' and len(node.args.args) == 3:
             self.visit(node, node.args.args[1])
             self.append("[")
@@ -365,8 +391,8 @@ class Generator(Visitor):
         self.append('return ');
         if node.arg is not None:
             self.visit(node, node.arg)
-        else:
-           self.append('0')
+        # else:
+        #    self.append('0')
 
     def visit_Break(self, parent, node):
         self.append('break')
@@ -402,9 +428,14 @@ class Generator(Visitor):
 
     def visit_Char(self, parent, node):
         name = node.value
-        self.append('\'')
-        self.append(name)
-        self.append('\'')
+        if(len(name) <= 1):
+            self.append('\'')
+            self.append(name)
+            self.append('\'')
+        else:
+            self.append('\"')
+            self.append(name)
+            self.append('\"')
 
     def visit_String(self, parent, node):
         name = node.value

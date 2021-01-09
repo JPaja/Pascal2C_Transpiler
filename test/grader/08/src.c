@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 
-bool jeProst(int n)
+int jeProst(int);
+int jeProst(int n)
 {
 	int i;
 	if((n <= 1))

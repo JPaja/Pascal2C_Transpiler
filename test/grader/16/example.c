@@ -11,7 +11,7 @@ int main() {
 	int n;
 	scanf("%d", &n);
 	if(n == 1) {
-		printf("%d", x);
+		printf("%d", n);
 	}else if(n == 2) {
 		n = 3.14;
 	}else if(n == 3) {

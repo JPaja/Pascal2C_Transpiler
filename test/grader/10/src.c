@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+
 
 int main() {
 int niz[100];

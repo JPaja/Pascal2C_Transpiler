@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <string.h>
 
+int pow_rek(int,int);
 int pow_rek(int a,int b)
 {
 	if((b == 0))

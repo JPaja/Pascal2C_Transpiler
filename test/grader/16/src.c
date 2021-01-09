@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 
+void fun1(int);
+void fun2(int,int);
 void fun1(int a)
 {
 	fun2(a,999);
@@ -11,7 +14,7 @@ int n;
 scanf("%d", &n);
 if((n == 1))
 {
-	printf("%d", x);
+	printf("%d", n);
 }else if((n == 2))
 {
 	n=3.14;

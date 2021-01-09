@@ -16,7 +16,7 @@ begin
 
 	if n = 1 then
 	begin
-		write(x);
+		write(n);
 	end
 	else if n = 2 then
 	begin

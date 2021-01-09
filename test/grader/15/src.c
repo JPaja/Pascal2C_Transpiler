@@ -1,5 +1,9 @@
 #include <stdio.h>
+#include <string.h>
 
+char cifra_stotina(char);
+char cifra_desetica(char);
+char cifra_jedinica(char);
 char cifra_stotina(char s)
 {
 	if((s < 100))
@@ -28,7 +32,7 @@ int i,j,len;
 scanf("%d", &s);
 i=1;
 j=1;
-len=length(s);
+len=strlen(s);
 while((i <= len))
 {
 	ascii=s[i];

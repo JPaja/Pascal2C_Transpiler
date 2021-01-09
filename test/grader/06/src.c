@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+
 
 int main() {
 float a1,b1,a2,b2,p1,p2;
