@@ -4,7 +4,7 @@
 
 int main() {
 float a1,b1,a2,b2,p1,p2;
-scanf("NoneNoneNoneNone", &a1, &b1, &a2, &b2);
+scanf("%f%f%f%f", &a1, &b1, &a2, &b2);
 p1=((a1 * b1) / 2);
 p2=((a2 * b2) / 2);
 if((p1 > p2))

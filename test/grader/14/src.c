@@ -5,14 +5,14 @@
 int main() {
 int a[100];
 int n,i,k;
-scanf("NoneNone", &n, &k);
+scanf("%d%d", &n, &k);
 for(i=1;i<=n;i++)
 {
-	scanf("None", &a[i]);
+	scanf("%d", &a[i]);
 };
 for(i=k;i<=((n + k) - 1);i++)
 {
-	printf("None%c", a[((i % n) + 1)], ' ');
+	printf("%d%c", a[((i % n) + 1)], ' ');
 };
 return 0;
 }

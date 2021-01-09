@@ -6,7 +6,7 @@ int main() {
 char c;
 int lo,hi;
 int d;
-scanf("None", &c);
+scanf("%c", &c);
 lo=(c >= 'A');
 hi=(c <= 'Z');
 if((lo && hi))
@@ -16,6 +16,6 @@ if((lo && hi))
 {
 	d=(c - 32);
 };
-printf("None", d);
+printf("%c", d);
 return 0;
 }

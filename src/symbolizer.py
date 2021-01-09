@@ -38,12 +38,18 @@ class Symbolizer(Visitor):
     def visit_FuncImpl(self, parent, node):
         node.symbols = Symbols()
         parent.symbols.put(node.id_, node.type_, id(parent))
+        for arg in node.params:
+            for id_ in arg.ids_:
+                parent.symbols.put(id_, arg.type_, id(parent))
         self.visit(node, node.body)
 
     def visit_ProcImpl(self, parent, node):
         # TODO: Check what to do for type
         node.symbols = Symbols()
         parent.symbols.put(node.id_, Type('void'), id(parent))
+        for arg in node.params:
+            for id_ in arg.ids_:
+                parent.symbols.put(id_, arg.type_, id(parent))
         self.visit(node, node.body)
 
     def visit_SzArray(self, parent, node):

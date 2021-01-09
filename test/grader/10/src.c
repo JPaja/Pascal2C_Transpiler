@@ -5,10 +5,10 @@
 int main() {
 int niz[100];
 int i,j,n,temp;
-scanf("None", &n);
+scanf("%d", &n);
 for(i=1;i<=n;i++)
 {
-	scanf("None", &niz[i]);
+	scanf("%d", &niz[i]);
 };
 for(i=1;i<=n;i++)
 {
@@ -27,7 +27,7 @@ for(i=1;i<=n;i++)
 };
 for(i=1;i<=n;i++)
 {
-	printf("None%c", niz[i], ' ');
+	printf("%d%c", niz[i], ' ');
 };
 return 0;
 }

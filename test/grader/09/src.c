@@ -11,7 +11,7 @@ int pow_rek(int a,int b)
 	return (a * pow_rek(a,(b - 1)));
 }int main() {
 int a,b;
-scanf("NoneNone", &a, &b);
-printf("None\n", pow_rek(a,b));
+scanf("%d%d", &a, &b);
+printf("%d\n", pow_rek(a,b));
 return 0;
 }

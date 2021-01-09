@@ -67,7 +67,9 @@ class Tests(unittest.TestCase):
 		self.assertTrue(True)
 
 	def test_generator(self):
-		for path in glob.glob("test/grader/01/src.pas"):
+		for path in glob.glob("test/grader/*/src.pas"):
+			dir = os.path.dirname(path)
+			should_fail = not dir.endswith('16')
 			with open(path, 'r') as source:
 				print(f"testing {path}")
 				text = source.read()
@@ -79,7 +81,6 @@ class Tests(unittest.TestCase):
 				symbolizer.symbolize()
 				grapher = Generator(ast,symbolizer)
 				grapher.generate()
-				dir = os.path.dirname(path)
 				sol = os.path.join(dir, 'src.c')
 				out = os.path.join(dir, 'out')
 				if os.path.exists(sol):
@@ -92,13 +93,32 @@ class Tests(unittest.TestCase):
 					p = sp.Popen(['gcc', sol, '-o', out], stdout=sp.PIPE)
 					retCode = p.wait()
 					self.assertTrue(retCode == 0)
+					p.stdout.close()
 					#s = str(p.stdout.read())
 					#self.assertTrue(s == '')
 				except Exception:
-					print('Fek')
-					self.assertTrue(False)
-				if p is not None:
-					p.stdout.close()
+					self.assertFalse(should_fail)
+				for i in range(1,5):
+					inFile = os.path.join(dir, str(i)+'.in')
+					outFile = os.path.join(dir, str(i) + '.out')
+					with open(inFile, 'r') as inText:
+						with open(outFile, 'r') as outText:
+							inText = inText.read()
+							outText = outText.read()
+							try:
+								of = sp.Popen([out], stdin=sp.PIPE, stdout=sp.PIPE)
+								of.stdin.write(inText.encode('utf-8'))
+								of.stdin.close()
+								rc = of.wait()
+								self.assertTrue(rc == 0)
+								b = of.stdout.read()
+								s = b.decode('utf-8')
+								of.stdout.close()
+								if(not should_fail):
+									self.assertEqual(s, str(outText))
+							except Exception:
+								self.assertFalse(should_fail)
+
 		self.assertTrue(True)
 
 #Tests().test_grapher()

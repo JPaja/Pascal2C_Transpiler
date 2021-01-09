@@ -41,7 +41,8 @@ class Generator(Visitor):
         raise SystemExit(text)
 
     def visit_Program(self, parent, node):
-
+        for symb in node.symbols:
+            self.varMap[symb.id_] = symb.type_
         for n in node.funcs:
             self.visit_FuncSig(node, n)
         self.newline()
@@ -385,10 +386,8 @@ class Generator(Visitor):
                 if id_.value != arg.value:
                     continue
                 return self.scanType(arg, type_, left, right)
-            return None
+            self.die("ne deklarisana varijabla")
         if isinstance(arg, ArrayElem):
-            return self.scanType(arg, arg.id_, left, right)
-        if isinstance(arg, FuncCall):
             return self.scanType(arg, arg.id_, left, right)
         if isinstance(arg, BinOp):
             return self.scanType(arg, arg.first, left, right)
@@ -415,7 +414,19 @@ class Generator(Visitor):
                 return prefix+'f'
             elif name == 'string':
                 return prefix+'s'
-        return None
+            elif name == 'char':
+                return prefix + 'c'
+        if isinstance(arg, RangeArray) or isinstance(arg, SzArray):
+            if arg.type_.value == 'char':
+                return prefix + 's'
+            return self.scanType(arg, arg.type_, left, right)
+        if isinstance(arg, FuncCall):
+            if arg.id_.value == 'chr':
+                return prefix + 'c'
+            if arg.id_.value == 'ord':
+                return prefix + 'd'
+            return self.scanType(arg, arg.id_, left, right)
+        self.die("Nije uspesno pronadjen tip expresie")
 
     def visit_FormatArg(self, parent, node):
         #TODO Detect printf and scanf parameters
