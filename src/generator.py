@@ -1,4 +1,4 @@
-from src.nodes import Type, SzArray, RangeArray, Assign
+from src.nodes import Type, SzArray, RangeArray, Assign, Id
 from src.visitor import Visitor
 import re
 import os
@@ -114,7 +114,11 @@ class Generator(Visitor):
 
     def visit_Decl(self, parent, node):
         self.indent()
-        self.visit(node, self.getType(node.type_))
+        type_ = self.getType(node.type_)
+        if type_.value == 'string':
+            self.append('char')
+        else:
+            self.visit(node, type_)
         self.append(' ')
         i = 0
         for n in node.ids_:
@@ -131,6 +135,8 @@ class Generator(Visitor):
                 self.visit(node.type_, node.type_.rightRange)
                 #self.append(node.type_.rightRange)
                 self.append(']')
+            elif type_.value == 'string':
+                self.append('[100] = {0}')
             if node.value is not None:
                 self.append('=')
                 self.visit(node, node.value)
@@ -144,6 +150,8 @@ class Generator(Visitor):
             self.append('bool')
         elif node.value == 'real':
             self.append('float')
+        elif node.value == 'string':
+            self.append('char*')
         else:
             self.append(node.value)
 
@@ -182,7 +190,7 @@ class Generator(Visitor):
         for statement in node.statements:
             if i != 0:
                 self.indent()
-                self.append('else')
+                self.append('else ')
             i+=1
             self.append('if(')
             self.visit(node, statement.cond)
@@ -266,7 +274,18 @@ class Generator(Visitor):
             elif id_ in ['write','writeln']:
                 self.append('printf')
                 self.visit_FormatedArgs(node.id_, node.args, False)
-        elif id_ in ['chr', 'ord']:
+        elif id_ in ['chr', 'ord'] and len(node.args.args) == 1:
+            self.visit(node, node.args.args[0])
+        elif id_ == 'inc' and len(node.args.args) == 1 and isinstance(node.args.args[0], Id):
+            self.visit(node, node.args.args[0])
+            self.append(" = ")
+            self.visit(node, node.args.args[0])
+            self.append(" + 1")
+        elif id_ == 'insert' and len(node.args.args) == 3:
+            self.visit(node, node.args.args[1])
+            self.append("[")
+            self.visit(node, node.args.args[2])
+            self.append("] = ")
             self.visit(node, node.args.args[0])
         else:
             self.visit(node,node.id_)
@@ -310,7 +329,7 @@ class Generator(Visitor):
         self.append('\"')
         for n in node.args:
             self.append(', ')
-            if write:
+            if write: #TODO check if alredy pointer (string)
                 self.append('&')
             self.visit(node, n)
         self.append(')')
@@ -340,7 +359,11 @@ class Generator(Visitor):
         self.append('}')
 
     def visit_Exit(self, parent, node):
-        self.append('return 0')
+        self.append('return ');
+        if node.arg is not None:
+            self.visit(node, node.arg)
+        else:
+           self.append('0')
 
     def visit_Break(self, parent, node):
         self.append('break')
