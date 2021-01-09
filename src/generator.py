@@ -52,6 +52,7 @@ class Generator(Visitor):
             for p in n.ids_:
                 if i != 0:
                     self.append(',')
+                i += 1
                 self.visit(node, n.type_)
                 self.append(' ')
                 self.visit(node, p)
@@ -61,7 +62,6 @@ class Generator(Visitor):
         self.level += 1
         self.visit(node, node.body)
         self.level -= 1
-        self.append("return ??")
         self.append("}")
 
     def visit_ProcImpl(self, parent, node):
@@ -179,8 +179,8 @@ class Generator(Visitor):
     def visit_If(self, parent, node):
         i = 0
         for statement in node.statements:
-            self.indent()
             if i != 0:
+                self.indent()
                 self.append('else')
             i+=1
             self.append('if(')
@@ -214,7 +214,6 @@ class Generator(Visitor):
         # self.visit(node, node.block)
 
     def visit_While(self, parent, node):
-        self.indent()
         self.append('while(')
         self.visit(node, node.cond)
         self.append(')')
@@ -229,7 +228,6 @@ class Generator(Visitor):
 
 
     def visit_For(self, parent, node):
-        self.indent()
         self.append('for(')
         self.visit(node, node.init)
         self.append(';')
@@ -406,6 +404,10 @@ class Generator(Visitor):
             self.append('||')
         elif (name == 'xor'):
             self.append('^')
+        elif (name == '='):
+            self.append('==')
+        elif (name == '<>'):
+            self.append('!=')
         else:
             self.append(name)
         self.append(' ')

@@ -48,7 +48,7 @@ class Parser:
                 self.eat(Class.SEMICOLON)
                 body = self.body()
                 self.eat(Class.SEMICOLON)
-                nodes.append(FuncImpl(id_,type_,args,body))
+                nodes.append(FuncImpl(type_,id_,args,body))
         main = self.body()
         self.eat(Class.DOT)
         return Program(nodes,main)
