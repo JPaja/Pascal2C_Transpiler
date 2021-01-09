@@ -173,11 +173,11 @@ class Parser:
             elif (self.curr.class_ == Class.REPEAT):
                 # nodes.append(Repeat())
                 self.eat(Class.REPEAT)
-                nodes = self.nodes_untill(Class.UNIIL)
+                nodes2 = self.nodes_untill(Class.UNIIL)
             #elif (self.curr.class_ == Class.UNIIL):
                 self.eat(Class.UNIIL)
                 cond = self.logic()
-                nodes.append(Until(cond,nodes))
+                nodes.append(Until(cond,nodes2))
                 self.eat(Class.SEMICOLON)
             elif self.curr.class_ == Class.FOR:
                 nodes.append(self.for_())

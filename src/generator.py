@@ -43,9 +43,9 @@ class Generator(Visitor):
         self.append("}")
 
     def visit_FuncImpl(self, parent, node):
-        self.visit(node.type_)
+        self.visit(node, node.type_)
         self.append(' ')
-        self.visit(node.id_)
+        self.visit(node, node.id_)
         self.append('(')
         i = 0
         for n in node.params:
@@ -61,6 +61,7 @@ class Generator(Visitor):
         self.level += 1
         self.visit(node, node.body)
         self.level -= 1
+        self.append("return ??")
         self.append("}")
 
     def visit_ProcImpl(self, parent, node):
@@ -351,9 +352,13 @@ class Generator(Visitor):
     def visit_Until(self, parent, node):
         self.indent()
 
-        self.append(' o {')
+        self.append('do {')
         self.level += 1
-        self.visit(node, node.block)
+        for n in node.nodes:
+            self.indent()
+            self.visit(node, n)
+            self.append(';')
+            self.newline()
         self.level -= 1
         self.indent()
         self.append('}')
